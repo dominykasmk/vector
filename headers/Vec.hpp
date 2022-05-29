@@ -18,7 +18,30 @@ public:
     Vec& operator=(const Vec&);
     ~Vec() { uncreate(); }
 
-    size_type size() const { return limit - data; }
+    size_type size() const { return avail - data; }
+    size_type capacity() const { return limit - data; }
+    bool empty() const { return data == avail; }
+    void resize(size_t n, value_type val =  value_type()) { 
+        if (n < size()) {
+            size_t diff = size() - n;   
+            for (size_t i{}; i < diff; i++) {
+                alloc.destroy(avail--);
+            }
+        }
+        else if (n > size()) {
+            for (size_t i{}; i < n; i++) {
+                if (n + size() > capacity())
+                    grow();
+
+                unchecked_append(val);
+            }
+        }
+
+    }
+    size_t max_size() const { return alloc.max_size(); };
+    void reserve(size_t n);
+    void shrink_to_fit();
+
     T& operator[](size_type i) { return data[i]; }
     const T& operator[](size_type i) const { return data[i]; }
 
@@ -32,6 +55,7 @@ public:
             grow();
         unchecked_append(val);
     }
+    
 
 private:
     iterator data;
@@ -90,6 +114,34 @@ void Vec<T>::uncreate() {
     }
 
     data = limit = avail = nullptr;
+}
+
+template <class T>
+void Vec<T>::reserve(size_t n) {
+    size_type new_size = n;
+
+    iterator new_data = alloc.allocate(new_size);
+    iterator new_avail = std::uninitialized_copy(data, avail, new_data);
+
+    uncreate();
+
+    data = new_data;
+    avail = new_avail;
+    limit = data + new_size;
+}
+
+template <class T>
+void Vec<T>::shrink_to_fit() {
+    size_t new_capacity = size();
+
+    iterator new_data = alloc.allocate(new_capacity);
+    iterator new_avail = std::uninitialized_copy(data, avail, new_data);
+
+    uncreate();
+
+    data = new_data;
+    avail = new_avail;
+    limit = data + new_capacity;
 }
 
 template <class T>
