@@ -29,5 +29,14 @@ int main() {
 
     cout << "at 7 " << v.at(7) << '\n';
 
+
+    cout << "last element " << v.back() << '\n';
+    cout << "size " << v.size() << '\n';
+    cout << "capacity " << v.capacity() << '\n';
+    v.pop_back();
+    cout << "last element " << v.back() << '\n';
+    cout << "size " << v.size() << '\n';
+    cout << "capacity " << v.capacity() << '\n';
+
     return EXIT_SUCCESS;
 }

@@ -51,6 +51,8 @@ public:
     T& at (size_t n);
     const T& at (size_t n) const; 
 
+    void push_back(const T &val); 
+    void pop_back();
 
     T& operator[](size_type i) { return data[i]; }
     const T& operator[](size_type i) const { return data[i]; }
@@ -60,11 +62,6 @@ public:
     iterator end() { return limit; }
     const_iterator end() const { return limit; }
 
-    void push_back(const T &val) {
-        if (avail == limit)
-            grow();
-        unchecked_append(val);
-    }
     
 
 private:
@@ -171,6 +168,17 @@ const T& Vec<T>::at (size_t n) const {
     return *(data + n - 1);
 }
 
+template <class T>
+void Vec<T>::push_back(const T &val) {
+    if (avail == limit)
+        grow();
+    unchecked_append(val);
+}
+
+template <class T>
+void Vec<T>::pop_back() {
+    alloc.destroy(--avail);  
+}
 
 template <class T>
 void Vec<T>::grow() {
