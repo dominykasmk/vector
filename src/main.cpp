@@ -22,6 +22,12 @@ int main() {
     v.shrink_to_fit();
     std::cout << '\n';
 
+    v[0] = 5;
+    cout << "front " << v.front() << '\n';
+
+    cout << "back " << v.back() << '\n';
+
+    cout << "at 7 " << v.at(7) << '\n';
 
     return EXIT_SUCCESS;
 }

@@ -21,7 +21,7 @@ public:
     size_type size() const { return avail - data; }
     size_type capacity() const { return limit - data; }
     bool empty() const { return data == avail; }
-    void resize(size_t n, value_type val =  value_type()) { 
+    void resize(size_t n, value_type val =  value_type()) { //TODO pridėti check'ą dėl capacity
         if (n < size()) {
             size_t diff = size() - n;   
             for (size_t i{}; i < diff; i++) {
@@ -41,6 +41,16 @@ public:
     size_t max_size() const { return alloc.max_size(); };
     void reserve(size_t n);
     void shrink_to_fit();
+
+    T& front() { return *data; };
+    const T& front() const { return *data; };
+
+    T& back() { return *(avail - 1); };
+    const T& back() const { return *(avail - 1); };
+
+    T& at (size_t n);
+    const T& at (size_t n) const; 
+
 
     T& operator[](size_type i) { return data[i]; }
     const T& operator[](size_type i) const { return data[i]; }
@@ -143,6 +153,24 @@ void Vec<T>::shrink_to_fit() {
     avail = new_avail;
     limit = data + new_capacity;
 }
+
+
+template <class T>
+T& Vec<T>::at (size_t n) {
+    if (n >= size())
+        throw std::out_of_range ("Neatitinka vektoriaus dydžio\n");
+
+    return *(data + n - 1);
+}
+
+template <class T>
+const T& Vec<T>::at (size_t n) const {
+    if (n >= size())
+        throw std::out_of_range ("Neatitinka vektoriaus dydžio\n");
+
+    return *(data + n - 1);
+}
+
 
 template <class T>
 void Vec<T>::grow() {
