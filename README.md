@@ -14,7 +14,6 @@ Implementavau savo vektor klasę, kurią ištestavau ir panaudojau su studentų 
  
  
 ## Pratestavau 5 skirtingaų vektorių funkcijų veikima tarp custom ir std vektorių
-![](pics/reserve.png)
 ![](pics/compare.png)
 ![](pics/shrink_to_fit.png)
 ![](pics/resize.png)
